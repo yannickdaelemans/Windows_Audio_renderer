@@ -96,11 +96,10 @@ HRESULT PlayAudioStream(PlayAudioSink *pMySource, LPWSTR pwszID )
 
     hr = pAudioClient->Start();  // Start playing.
     EXIT_ON_ERROR(hr)
-    printf("here\n");
+    
     // Each loop fills about half of the shared buffer.
     while (flags != AUDCLNT_BUFFERFLAGS_SILENT)
     {
-        printf("here now\n");
         // Sleep for half the buffer duration.
         Sleep((DWORD)(hnsActualDuration/REFTIMES_PER_MILLISEC/2));
 
@@ -114,25 +113,10 @@ HRESULT PlayAudioStream(PlayAudioSink *pMySource, LPWSTR pwszID )
         hr = pRenderClient->GetBuffer(numFramesAvailable, &pData);
         EXIT_ON_ERROR(hr)
 
-        printf("here now\n");
-
         // Get next 1/2-second of data from the audio source.
         hr = pMySource->LoadData(numFramesAvailable, pData, &flags);
         EXIT_ON_ERROR(hr)
-        /*
-        union{
-          float floatData;
-          BYTE byteData[4];
-        } data;
 
-        int size = 0;
-        while (size < 4){
-          *pData = data.byteData[size];
-          pData ++;
-        }
-
-        printf("%f\n", data.floatData );
-        */
         hr = pRenderClient->ReleaseBuffer(numFramesAvailable, flags);
         EXIT_ON_ERROR(hr)
     }
