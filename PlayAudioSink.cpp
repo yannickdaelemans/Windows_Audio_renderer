@@ -55,11 +55,15 @@ HRESULT PlayAudioSink::LoadData(UINT32 bufferFrameCount, BYTE *pData, DWORD *fla
     BYTE byteData[4];
   } data;
 
+  printf("here in play\n");
+
   while (bufferFrameCount != 0){
     if(distance >= dataVector.size()){
       *flags = AUDCLNT_BUFFERFLAGS_SILENT;
+      printf("return silent\n");
       return 0;
     }
+    //printf("here in play now\n");
 
     data.floatData = dataVector[distance][0];
 
@@ -68,11 +72,13 @@ HRESULT PlayAudioSink::LoadData(UINT32 bufferFrameCount, BYTE *pData, DWORD *fla
     while (size < 4){
       *pData = data.byteData[size];
       pData ++;
+      size ++;
     }
     size = 0;
     while (size < 4){
       *pData = data.byteData[size];
       pData ++;
+      size ++;
     }
 
     distance ++;
